@@ -5,7 +5,7 @@ require("dotenv").config();
 var fs = require ("fs");
 
 //keys/npm for Twitter call
-var keys = require('./keys');
+var keys = require('./keys.js');
 var twitter = require ("twitter");
 
 //npm for Spotify call
@@ -18,20 +18,22 @@ var movie = require ("request");
 var inputOne = process.argv[2];
 
 //set up Twitter variables/function
-var twitterParams = {q: MamaMac01185889, count: 20};
-var client = new twitter(keys.twitter);
+var twitterParams = {q: '@MamaMac01185889', count: 20};
+var client = new twitter(twitter);
 
 //TWITTER: Show last 20 tweets and when they were created (user inputs node liri.js 'my-tweets')
     function getTweets (){
-        client.get( 'statuses/user_timeline', twitterParams, function(error, tweets, response){
+            client.get( "statuses/user_timeline", twitterParams, function(error, data, response){
             if (!error){
-                console.log("Error occurred: " + error);
-            } else {
-                for (var i = 0; i < tweets.length; i++) {
-                    console.log(tweets[i].text + " Created on: " + tweets[i].created_at);
+               for (var i = 0; i < data.length; i++) {
+                    console.log(" Created on: " + data[i].created_at + "\n" + "Tweet content: " + data[i].text + "\n" +"------------------------------\n");
                 }
-            }});
-
+            }
+            else {
+                console.log (error);
+            }
+        })};
+ 
 //set up Spotify variables/function
 var spotify = new Spotify(keys.spotify);
 var querySpotify = " ";
@@ -71,14 +73,14 @@ var querySpotify = " ";
     };
 
 //set up omdb variables/function  
-var queryOmdb = " ";  
+var movieTitle = "";
 
 //omdb: Movie-this shows movie data (see console.log in func for list)(user inputs node liri.js movie-this '<movie name here>')
     function getMovie() {
         if (inputOne !== undefined) {
-             queryOmdb = inputOne;
+            movieTitle = inputOne;
         }
-        request('http://www.omdbapi.com/?t=' + queryOmdb + "&tomatoes=true", function (error, response, body) {
+        request('http://www.omdbapi.com/?t=' + movieTitle + "&y=&plot=short&tomatoes=true&apikey=trilogy", function (error, response, body) {
             if (error) {
                 console.log("Error occurred: " + error);
                 return;
@@ -100,9 +102,9 @@ var queryOmdb = " ";
 
     //if no movie specified, look up Mr. Nobody    
         if (inputOne === undefined) {
-            queryOmdb = "mr. Nobody";
+            queryOmdb = "Mr. Nobody";
    }
-            request('http://www.omdbapi.com/?t=' + queryOmdb + "&tomatoes=true", function (error, response, body) {
+            request('http://www.omdbapi.com/?t=' + queryOmdb + "&y=&plot=short&tomatoes=true&apikey=trilogy", function (error, response, body) {
                 if (error) {
                     console.log("Error occurred: " + error);
                     return;
@@ -122,8 +124,8 @@ var queryOmdb = " ";
                 }
             });
 
-        }
-    }    
+        };
+        
 
 // Uses fs node package to take the text inside random.txt,
 // and do something with it(user inputs node liri.js do-what-it-says).
