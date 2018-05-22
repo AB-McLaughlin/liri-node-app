@@ -9,7 +9,7 @@ var keys = require('./keys.js');
 var twitter = require ("twitter");
 
 //npm for Spotify call
-var spotify = require ("node-spotify-api");
+var Spotify = require ("node-spotify-api");
 
 //npm for omdb
 var movie = require ("request");
@@ -22,6 +22,10 @@ var twitterParams = {q: '@MamaMac01185889', count: 20};
 var client = new twitter(twitter);
 
 //TWITTER: Show last 20 tweets and when they were created (user inputs node liri.js 'my-tweets')
+//client.get('search/tweets', {q: 'node.js'}, function(error, tweets, response) {
+//    console.log(tweets);
+//});
+
     function getTweets (){
             client.get( "statuses/user_timeline", twitterParams, function(error, data, response){
             if (!error){
@@ -39,14 +43,30 @@ var spotify = new Spotify(keys.spotify);
 var querySpotify = " ";
 
 //SPOTIFY: Spotify-this-song show artist, song, spotify 30 sec preview, album(user inputs node liri.js spotify-this-song '<song name here>')
-    function getSpotify () {
+    
+//var Spotify = require('node-spotify-api');
+ 
+//var spotify = new Spotify({
+  //id: <your spotify client id>,
+//   secret: <your spotify client secret>
+// });
+ 
+// spotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
+//   if (err) {
+//     return console.log('Error occurred: ' + err);
+//   }
+ 
+// console.log(data); 
+// });
+
+
+function getSpotify () {
         if (inputOne !== undefined) {
             querySpotify = inputOne;
         } 
-        spotify.search({type: 'track', q: querySpotify}, function(error, data){
+        spotify.search({type: 'track', query: 'querySpotify'}, function(error, data){
             if (error) {
-                console.log("Error occurred: " + error);
-                return;
+                return console.log("Error occurred: " + error);
             } else {
             console.log("Artist: " + data.tracks.items[0].artists[0].name);
             console.log("Song Name: " + data.tracks.items[0].name);
@@ -56,7 +76,7 @@ var querySpotify = " ";
         })
 //if no song specified, look up The Sign, Ace of Bass        
         if (inputOne === undefined) {
-            querySpotify = '3DYVWvPh3kGwPasp7yjahc';
+            querySpotify = "0hrBpAOgrt8RXigk83LLNE";
         }    
         spotify.lookup({type: 'track', id: querySpotify}, function(error, data) {
                 if (error) {
@@ -80,7 +100,7 @@ var movieTitle = "";
         if (inputOne !== undefined) {
             movieTitle = inputOne;
         }
-        request('http://www.omdbapi.com/?t=' + movieTitle + "&y=&plot=short&tomatoes=true&apikey=trilogy", function (error, response, body) {
+        request("http://www.omdbapi.com/?t=" + movieTitle + "&y=&plot=short&tomatoes=true&apikey=trilogy", function (error, response, body) {
             if (error) {
                 console.log("Error occurred: " + error);
                 return;

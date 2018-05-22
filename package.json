@@ -18,7 +18,10 @@
   },
   "homepage": "https://github.com/AB-McLaughlin/liri-node-app#readme",
   "dependencies": {
+<<<<<<< HEAD
     "dotenv": "^5.0.1",
+=======
+>>>>>>> a3a97ed507b0eec45101ce34fd10fa550d5d246f
     "fs": "0.0.1-security",
     "node-spotify-api": "^1.0.7",
     "request": "^2.86.0",
